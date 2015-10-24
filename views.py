@@ -1,5 +1,5 @@
-from flask import Flask, render_template, jsonify, make_response
 import path, tripadvisor, itinerary
+from flask import Flask, render_template, jsonify, make_response, request
 import sqlite3
 import json
 
@@ -69,11 +69,12 @@ def trip():
     nodes = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
     events = tripadvisor.getResults(nodes)
     yodays = itinerary.getResults(events)
-    # print("yodays: ")
-    # print(json.dumps(yodays, indent=4, sort_keys=True))
-    # print("days: ")
-    # print(json.dumps(days, indent=4, sort_keys=True))
+    start = request.args.get('start', None)
+    end = request.args.get('end', None)
+    print start 
+    print end
     return render_template('trip.html', days=yodays)
+
 
 @app.route("/")
 def login():

@@ -21,6 +21,29 @@ h6 {
     font-weight: 700;
 }
 
+form {
+    text-align: center !important;
+    width: 750px;
+    display: inline-block;
+}
+
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+:-ms-input-placeholder {  
+   text-align: center; 
+}
+
 .topnav {
     font-size: 14px; 
 }
@@ -35,13 +58,13 @@ h6 {
     padding-bottom: 50px;
     text-align: center;
     color: #f8f8f8;
-    background: url(../img/intro-bg.png) no-repeat center center;
+    background: #87D37C;
     background-size: cover;
 }
 
 .intro-message {
     position: relative;
-    padding-top: 20%;
+    padding-top: 0%;
     padding-bottom: 20%;
 }
 
@@ -115,8 +138,8 @@ h6 {
 
 .banner {
     padding: 100px 0;
-    color: #f8f8f8;
-    background: url(../img/banner-bg.jpg) no-repeat center center;
+    color: #58974E;
+    background: #58974E;
     background-size: cover;
 }
 
