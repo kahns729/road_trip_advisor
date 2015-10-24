@@ -18,6 +18,7 @@ function show_overview() {
 		html_string += "</ul>"
 	}
 	$("#events_list").html(html_string);
+	setRouteForDay(-1); // show whole route
 }
 
 function switch_day(day) {
@@ -25,6 +26,7 @@ function switch_day(day) {
 	for (var i = 0; i < days.length; i++) {
 		if (days[i].day == day) {
 			display_events(days[i].events);
+			setRouteForDay(i); // update the map
 		}	
 	};
 	

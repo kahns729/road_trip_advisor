@@ -1,14 +1,18 @@
 var infowindow = new google.maps.InfoWindow();
 var markers = [];
+var itinerary = {};
+var initialized = false;
 
-function initMap(itinerary) {
+function initMap(itin) {
+  itinerary = itin;
+
   map = new google.maps.Map(document.getElementById('map'), {
     center: itinerary[0]["start"],
     scrollwheel: false,
-    zoom: 7
+    zoom: 10
   });
 
-  var directionsDisplay = new google.maps.DirectionsRenderer({
+  directionsDisplay = new google.maps.DirectionsRenderer({
     map: map
   });
 
@@ -38,10 +42,49 @@ function initMap(itinerary) {
   //     createMarker(createLocation(node["location"]), node["name"], i);
   //   }
   // }
+  initialized = true;
+}
+
+function setRouteForDay(d) {
+  // hacky workaround for preventing crash when embedding function in dropdown
+  if (!initialized) {
+    return
+  }
+
+  directionsDisplay.setDirections({routes: []});
+
+  var waypoints = []
+  if (d > -1) {
+    day = itinerary[d]
+    for (j = 0; j < day["events"].length; j++) {
+      node = day["events"][j];
+      waypoints.push(createWaypoint(createLocation(node["location"])));
+    }
+  }
+  else {
+    waypoints = locations
+  }
+
+  // Set destination, origin and travel mode.
+  var request = {
+    destination: day["end"],
+    origin: day["start"],
+    waypoints: waypoints,
+    optimizeWaypoints: false,
+    travelMode: google.maps.TravelMode.DRIVING
+  };
+
+  // Pass the directions request to the directions service.
+  var directionsService = new google.maps.DirectionsService();
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      // Display the route on the map.
+      directionsDisplay.setDirections(response);
+    }
+  });
 }
 
 function createLocation(locPair) {
-  console.log(locPair);
   return new google.maps.LatLng(locPair["lat"], locPair["lng"]);
 }
 
