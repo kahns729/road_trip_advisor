@@ -1,0 +1,11 @@
+.DS_Store
+.ipynb_checkpoints
+*.pyc
+venv
+
+data/*
+healthbase.db
+test.db
+*.ipynb
+hb.pub
+hb

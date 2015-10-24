@@ -8,8 +8,6 @@ app.config.from_object('config')
 def access_db():
     return sqlite3.connect(app.config['DATABASE'])
 
-# app
-
 @app.route("/")
 def login():
     return render_template('index.html')
