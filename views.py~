@@ -68,7 +68,6 @@ def access_db():
 def trip():
     start = request.args.get('start', None)
     end = request.args.get('end', None)
-    print("Start loc: " + start + "\nEnd loc: " + end)
     nodes = path.find_waypoints(start, end)
     # nodes = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
     events = tripadvisor.getResults(nodes)
