@@ -7,6 +7,7 @@ app.config.from_object('config')
 
 days = [ 
             {
+                "day": 1,
                 "start": {"lat": 42, "lng": -71},
                 "events": [
                     {
@@ -30,6 +31,7 @@ days = [
                 "miles": 480
             },
             {
+                "day": 2,
                 "start": {"lat": 45, "lng": -68},
                 "events": [
                     {
@@ -56,6 +58,10 @@ days = [
 
 def access_db():
     return sqlite3.connect(app.config['DATABASE'])
+
+@app.route("/trip")
+def trip():
+    return render_template('trip.html', days=days)
 
 @app.route("/")
 def login():
