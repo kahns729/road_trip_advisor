@@ -1,14 +1,12 @@
-import urllib2, json
-
-API_KEY  = "A43BE80DF04A4F98A60B76E42CF05D7F"
-API_KEY2 = "EB205D5CF19247E3BC975276040A7687"
+import urllib2, json, config
 
 def getJSON (lat, lon, extra = None):
 	address = "http://api.tripadvisor.com/api/partner/2.0/map/"
 	address += str(lat) + "," + str(lon)
 	if extra:
 		address += "/" + extra
-	address += "?key=" + API_KEY
+	address += "?key=" + config.TRIPADVISOR_API_KEY
+	address += "&distance=" + str(config.LOCATION_RADIUS)
 	JSON = json.loads(urllib2.urlopen(address).read())
 	return JSON['data']
 
@@ -32,7 +30,7 @@ def getAttractions (lat, lon):
 
 def getAll (lat, lon):
 	dic = {}
-	dic["node"] = {"lat" : lat, "lng" : lng}
+	dic["node"] = {"lat" : lat, "lng" : lon}
 	dic["attractions"] = getAttractions(lat, lon)
 	dic["food"] = getFood(lat, lon)
 	dic["hotels"] = getHotels(lat, lon)
