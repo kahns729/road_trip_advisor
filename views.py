@@ -5,55 +5,6 @@ import json
 app = Flask(__name__)
 app.config.from_object('config')
 
-days = [ 
-            {
-                "start": {"lat": 42, "lng": -71},
-                "events": [
-                    {
-                        "name": "Event 1",
-                        "category": {"name": "hotel"},
-                        "location": {"lat": 43, "lng": -70}
-                    },
-                    {
-                        "name": "Event 2",
-                        "category": {"name": "attraction"},
-                        "location": {"lat": 44, "lng": -69}
-                    },
-                    {
-                        "name": "Event 3",
-                        "category": {"name": "food"},
-                        "location": {"lat": 45, "lng": -68}
-                    }
-                ],
-                "end": {"lat": 45, "lng": -68},
-                "hours_driving": 8,
-                "miles": 480
-            },
-            {
-                "start": {"lat": 45, "lng": -68},
-                "events": [
-                    {
-                        "name": "Day 2 Event 1",
-                        "category": "Hotel",
-                        "location": {"lat": 44, "lng": -69}
-                    },
-                    {
-                        "name": "Day 2 Event 2",
-                        "category": "Attraction",
-                        "location": {"lat": 43, "lng": -70}
-                    },
-                    {
-                        "name": "Day 2 Event 3",
-                        "category": "Food",
-                        "location": {"lat": 42, "lng": -71}
-                    }
-                ],
-                "end": {"lat": 42, "lng": -71},
-                "hours_driving": 10,
-                "miles": 540
-            }
-    ]
-
 def access_db():
     return sqlite3.connect(app.config['DATABASE'])
 
@@ -72,6 +23,59 @@ def table():
     conn.close()
     return render_template('table.html', data=pf15)
 
+@app.route("/smap")
+def smap():
+    days = [ 
+            {
+                "start": {"lat": 42, "lng": -71},
+                "events": [
+                    {
+                        "name": "Event 1",
+                        "category": {"name": "hotel"},
+                        "location": {"lat": 41.7, "lng": -71.5}
+                    },
+                    {
+                        "name": "Event 2",
+                        "category": {"name": "attraction"},
+                        "location": {"lat": 41.6, "lng": -71.8}
+                    },
+                    {
+                        "name": "Event 3",
+                        "category": {"name": "food"},
+                        "location": {"lat": 41.65, "lng": -71.3}
+                    }
+                ],
+                "end": {"lat": 41.5, "lng": -72},
+                "hours_driving": 8,
+                "miles": 480
+            },
+            {
+                "start": {"lat": 41.5, "lng": -72},
+                "events": [
+                    {
+                        "name": "Day 2 Event 1",
+                        "category": "Hotel",
+                        "location": {"lat": 41.3, "lng": -72.3}
+                    },
+                    {
+                        "name": "Day 2 Event 2",
+                        "category": "Attraction",
+                        "location": {"lat": 41.5, "lng": -72.5}
+                    },
+                    {
+                        "name": "Day 2 Event 3",
+                        "category": "Food",
+                        "location": {"lat": 41.8, "lng": -72.8}
+                    }
+                ],
+                "end": {"lat": 41, "lng": -73},
+                "hours_driving": 10,
+                "miles": 540
+            }
+    ]
+
+    return render_template('smap.html', itinerary=days)
+
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'not found'}), 404)
+    return make_response(jsonify({'error': 'got rekt'}), 404)
