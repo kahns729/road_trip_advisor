@@ -56,15 +56,8 @@ function display_description(event) {
 	if (event.location_string != null) {
 		html_string += "<h3>" + event.location_string + "</h3>"
 	}
-	if (getImage(event.location_id) != null) {
-		html_string += "<img src=" + getImage(event.see_all_photos) + " alt='img'/>"
-	}
-	
-	console.log(event);
 	$("#event_description").html(html_string);
-}
-
-function getImage (id) {
+	imageURL = null;
 	function makeHttpObject() {
 		try {return new XMLHttpRequest();}
 		catch (error) {}
@@ -77,29 +70,66 @@ function getImage (id) {
 	}
 
 	url = "http://api.tripadvisor.com/api/partner/2.0/location/"
-	+ id + "/photos?key=A43BE80DF04A4F98A60B76E42CF05D7F";
+	+ event.location_id + "/photos?key=EB205D5CF19247E3BC975276040A7687";
 
 	var request = makeHttpObject();
 	request.open("GET", url, true);
 	request.send(null);
 	request.onreadystatechange = function() {
+		console.log("ready state" + request.readyState);
 		if (request.readyState == 4) {
 			response = JSON.parse(request.responseText);
-			console.log(response);
 			data = response["data"];
 			if (data != null && data.length > 0) {
 				images = data[0]["images"]
 				for (var key in images) {
 					if (images[key]["url"] != null) {
-						return images[key]["url"]
+						console.log(images[key]["url"]);
+						imageURL = images[key]["url"];
+						html_string += "<img src=" + imageURL + " alt='i'/>";
+						$("#event_description").html(html_string);
+						return;
 					}
 				}
 			}
-			// result = regex.exec(request.responseText);
-			// console.log(result);
-			// r = result[0];
-			// return r.split('"')[1];
-			return null
 		}
 	};
 }
+
+// function getImage (id) {
+// 	imageURL = null;
+// 	function makeHttpObject() {
+// 		try {return new XMLHttpRequest();}
+// 		catch (error) {}
+// 		try {return new ActiveXObject("Msxml2.XMLHTTP");}
+// 		catch (error) {}
+// 		try {return new ActiveXObject("Microsoft.XMLHTTP");}
+// 		catch (error) {}
+
+// 		throw new Error("Could not create HTTP request object.");
+// 	}
+
+// 	url = "http://api.tripadvisor.com/api/partner/2.0/location/"
+// 	+ id + "/photos?key=EB205D5CF19247E3BC975276040A7687";
+
+// 	var request = makeHttpObject();
+// 	request.open("GET", url, true);
+// 	request.send(null);
+// 	request.onreadystatechange = function() {
+// 		if (request.readyState == 4) {
+// 			response = JSON.parse(request.responseText);
+// 			console.log(response);
+// 			data = response["data"];
+// 			if (data != null && data.length > 0) {
+// 				images = data[0]["images"]
+// 				for (var key in images) {
+// 					if (images[key]["url"] != null) {
+// 						console.log(images[key]["url"]);
+// 						imageURL = images[key]["url"]
+// 						break;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	};
+// }
