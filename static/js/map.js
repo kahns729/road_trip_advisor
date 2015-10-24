@@ -102,8 +102,9 @@ function getWaypoints() {
     }
     for (j = 0; j < day["events"].length; j++) {
       node = day["events"][j];
-      // console.log(JSON.stringify(node));
-      locations.push(createWaypoint(node["location"]));
+      if (node["category"]["name"] == "hotel") {
+        locations.push(createWaypoint(node["location"]));
+      }
     }
   }
   return locations;
