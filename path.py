@@ -4,9 +4,9 @@ import json
 from geopy.distance import vincenty
 
 def distance(start, end):
-	km_to_m = 0.621371
-	dist_str = str(vincenty((start["lat"], start["lng"]), (end["lat"], end["lng"])))
-	return km_to_m * float(dist_str.split(" ")[0])
+    km_to_m = 0.621371
+    dist_str = str(vincenty((start["lat"], start["lng"]), (end["lat"], end["lng"])))
+    return km_to_m * float(dist_str.split(" ")[0])
 
 def find_waypoints(source, destination, trip_length):
 	url = 'https://maps.googleapis.com/maps/api/directions/json'

@@ -56,7 +56,7 @@ function display_description(event) {
 	if (event.location_string != null) {
 		html_string += "<h3>" + event.location_string + "</h3>"
 	}
-	if (event.see_all_photos != null) {
+	if (getImage(event.location_id) != null) {
 		html_string += "<img src=" + getImage(event.see_all_photos) + " alt='img'/>"
 	}
 	
@@ -64,7 +64,7 @@ function display_description(event) {
 	$("#event_description").html(html_string);
 }
 
-function getImage (url) {
+function getImage (id) {
 	function makeHttpObject() {
 		try {return new XMLHttpRequest();}
 		catch (error) {}
@@ -76,18 +76,30 @@ function getImage (url) {
 		throw new Error("Could not create HTTP request object.");
 	}
 
-	regex = /<img src=[^><]*.jpg\" class=\"photo_image\"/i
+	url = "http://api.tripadvisor.com/api/partner/2.0/location/"
+	+ id + "/photos?key=A43BE80DF04A4F98A60B76E42CF05D7F";
 
 	var request = makeHttpObject();
 	request.open("GET", url, true);
 	request.send(null);
 	request.onreadystatechange = function() {
 		if (request.readyState == 4) {
-			console.log(request.responseText)
-			result = regex.exec(request.responseText);
-			console.log(result);
-			r = result[0];
-			return r.split('"')[1];
+			response = JSON.parse(request.responseText);
+			console.log(response);
+			data = response["data"];
+			if (data != null and data.length > 0) {
+				images = data[0]["images"]
+				for (var key in images) {
+					if (images[key]["url"] != null) {
+						return images[key]["url"]
+					}
+				}
+			}
+			// result = regex.exec(request.responseText);
+			// console.log(result);
+			// r = result[0];
+			// return r.split('"')[1];
+			return null
 		}
 	};
 }
