@@ -52,4 +52,12 @@ def find_waypoints(source, destination):
 		elif dist_mod > config.DIST_INTERVAL:
 			points.append(step["start_location"])
 			dist_mod = dist_mod % config.DIST_INTERVAL
-	return points
+	duration_str = data["routes"][0]["legs"][0]["duration"]["text"]
+	hrs = duration_str.split(" ")[0]
+	mins = duration_str.split(" ")[2]
+	duration = float(hrs) + float(mins)/60
+	return {"points": points, "duration": duration}
+
+
+
+print(find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA"))
