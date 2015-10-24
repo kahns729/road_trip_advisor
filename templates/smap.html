@@ -17,6 +17,7 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&amp;libraries=places"></script>
     <script>
     var infowindow = new google.maps.InfoWindow();
+    var markers = [];
     
     function initMap() {
       itinerary = {{ itinerary|tojson|safe }}
@@ -48,17 +49,18 @@
       });
 
       for (i = 0; i < itinerary.length; i++) {
+        markers.push([]);
         day = itinerary[i];
         console.log(day);
         for (j = 0; j < day["events"].length; j++) {
           node = day["events"][j];
           console.log(node);
-          createMarker(node["location"]["lat"], node["location"]["lng"], node["name"])
+          createMarker(node["location"]["lat"], node["location"]["lng"], node["name"], i)
         }
       }
     }
 
-    function createMarker(lat, lng, name) {
+    function createMarker(lat, lng, name, day) {
         //create location
         var loc = new google.maps.LatLng(lat, lng);
 
@@ -75,6 +77,23 @@
           infowindow.setContent(mark.title);
           infowindow.open(map, mark);
         });
+
+        markers[i].push(mark)
+    }
+
+    function showMarkers(day) {
+      for (i = 0; i < markers.length; i++) {
+        if (i == day) {
+          for (marker in markers[i]) {
+            marker.setVisible(true);
+          }
+        }
+        else {
+          for (marker in markers[i]) {
+            marker.setVisible(false);
+          }
+        }
+      }
     }
     </script>
   </head>
