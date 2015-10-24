@@ -36,6 +36,8 @@
       var request = {
         destination: itinerary[itinerary.length - 1]["end"],
         origin: itinerary[0]["start"],
+        waypoints: getWaypoints(),
+        optimizeWaypoints: false,
         travelMode: google.maps.TravelMode.DRIVING
       };
 
@@ -48,22 +50,45 @@
         }
       });
 
+      // for (i = 0; i < itinerary.length; i++) {
+      //   markers.push([]);
+      //   day = itinerary[i];
+      //   for (j = 0; j < day["events"].length; j++) {
+      //     node = day["events"][j];
+      //     createMarker(createLocation(node["location"]), node["name"], i);
+      //   }
+      // }
+    }
+
+    function createLocation(locPair) {
+      console.log(locPair);
+      return new google.maps.LatLng(locPair["lat"], locPair["lng"]);
+    }
+
+    function getWaypoints() {
+      locations = []
       for (i = 0; i < itinerary.length; i++) {
-        markers.push([]);
         day = itinerary[i];
-        console.log(day);
+        if (i != 0) {
+          locations.push(createWaypoint(createLocation(day["start"])))
+        }
         for (j = 0; j < day["events"].length; j++) {
           node = day["events"][j];
-          console.log(node);
-          createMarker(node["location"]["lat"], node["location"]["lng"], node["name"], i)
+          locations.push(createWaypoint(createLocation(node["location"])));
         }
+      }
+      console.log("We made it!")
+      return locations;
+    }
+
+    function createWaypoint (loc) {
+      return {
+        location: loc,
+        stopover: true
       }
     }
 
-    function createMarker(lat, lng, name, day) {
-        //create location
-        var loc = new google.maps.LatLng(lat, lng);
-
+    function createMarker(loc, name, day) {
         // create new marker
         var mark = new google.maps.Marker({
           map: map,
