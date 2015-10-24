@@ -10,11 +10,32 @@ function initMap(itin) {
     center: itinerary[0]["start"],
     scrollwheel: false,
     zoom: 10
+    //mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
   directionsDisplay = new google.maps.DirectionsRenderer({
     map: map
   });
+
+  initialized = true;
+  setEntireRoute();
+
+  // for (i = 0; i < itinerary.length; i++) {
+  //   markers.push([]);
+  //   day = itinerary[i];
+  //   for (j = 0; j < day["events"].length; j++) {
+  //     node = day["events"][j];
+  //     createMarker(createLocation(node["location"]), node["name"], i);
+  //   }
+  // }
+}
+
+function setEntireRoute() {
+  if (!initialized) {
+    return
+  }
+
+  directionsDisplay.setDirections({routes: []});
 
   // Set destination, origin and travel mode.
   var request = {
@@ -33,36 +54,16 @@ function initMap(itin) {
       directionsDisplay.setDirections(response);
     }
   });
-
-  // for (i = 0; i < itinerary.length; i++) {
-  //   markers.push([]);
-  //   day = itinerary[i];
-  //   for (j = 0; j < day["events"].length; j++) {
-  //     node = day["events"][j];
-  //     createMarker(createLocation(node["location"]), node["name"], i);
-  //   }
-  // }
-  initialized = true;
 }
 
 function setRouteForDay(d) {
-  // hacky workaround for preventing crash when embedding function in dropdown
-  if (!initialized) {
-    return
-  }
-
   directionsDisplay.setDirections({routes: []});
 
   var waypoints = []
-  if (d > -1) {
-    day = itinerary[d]
-    for (j = 0; j < day["events"].length; j++) {
-      node = day["events"][j];
-      waypoints.push(createWaypoint(createLocation(node["location"])));
-    }
-  }
-  else {
-    waypoints = locations
+  day = itinerary[d]
+  for (j = 0; j < day["events"].length; j++) {
+    node = day["events"][j];
+    waypoints.push(createWaypoint(createLocation(node["location"])));
   }
 
   // Set destination, origin and travel mode.

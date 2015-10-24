@@ -18,7 +18,7 @@ function show_overview() {
 		html_string += "</ul>"
 	}
 	$("#events_list").html(html_string);
-	setRouteForDay(-1); // show whole route
+	setEntireRoute(); // update the map
 }
 
 function switch_day(day) {
