@@ -26,6 +26,9 @@ def find_waypoints(source, destination):
 	for step in steps:
 		count += 1
 		try:
+			# At first node
+			if count == 1:
+				points.append(step["start_location"])
 			step_length = distance(step["start_location"], step["end_location"])
 			dist_mod += step_length
 		except:
@@ -35,7 +38,7 @@ def find_waypoints(source, destination):
 			else:
 				continue
 		if step_length > config.DIST_INTERVAL:
-			steps.append(step["start_location"])
+			# steps.append(step["start_location"])
 			# How many segments to split the highway into
 			intervals = int(math.ceil(float(step_length) / config.DIST_INTERVAL))
 			lng_diff = math.fabs(float(step["start_location"]["lng"]) \
@@ -56,8 +59,9 @@ def find_waypoints(source, destination):
 	hrs = duration_str.split(" ")[0]
 	mins = duration_str.split(" ")[2]
 	duration = float(hrs) + float(mins)/60
-	return {"points": points, "duration": duration}
+	# TODO: CHANGE!!! :D
+	return {"points": points, "duration": duration, "usertime": int(math.ceil(duration / 8))}
 
 
 
-print(find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA"))
+# print(find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA"))

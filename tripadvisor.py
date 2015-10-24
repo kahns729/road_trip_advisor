@@ -37,4 +37,4 @@ def getAll (lat, lon):
 
 def getResults (locations):
 	return {"events": [getAll(loc["lat"], loc["lng"]) for loc in locations["points"]],
-			"duration": locations["duration"]}
+			"duration": locations["duration"], "usertime": locations["usertime"]}

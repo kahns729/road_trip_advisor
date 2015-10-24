@@ -1,4 +1,5 @@
 import json, config
+import path, tripadvisor
 from math import ceil
 
 # Summary: returns the day itinerary by filtering out locations with
@@ -20,37 +21,79 @@ def getResults (data):
 
 # Summary: returns the filtered events for all waypoints 
 def makeItinerary (data):
-    scale = 1.5
+    scale = 1
     daytime = 12
     user_desired_days = data["usertime"]
     min_time = data["duration"]
     total_time = int(ceil(scale * data["duration"]))
     fun_time = int(ceil(user_desired_days * daytime)) - total_time
     num_activities = fun_time / 2
+    activities_per_day = num_activities / user_desired_days
     locations = data["events"]
     drive_hours = int(ceil(user_desired_days * daytime)) - fun_time
+    days = []
+
+    start = data["events"][0]["node"]
 
     # number of locations we pass in a day
-    interval = int(ceil(length(locations) / user_desired_days))
+    interval = int(ceil(len(locations) / user_desired_days))
     # if an edge case, no activities fit into schedule
     if edge_case(user_desired_days, min_time, num_activities):
         return []
-    for i in range(num_activities):
+    for i in range(int(user_desired_days)):
+        activities = []
         temp = []
+        top_hotel = None
+        top_dinner = None
         # for each location in the day interval
         for j in range(interval):
             # if out of bounds
-            if i + j >= length(locations):
-                break;
-            temp.append(locations[i + j])
-        bestDay = reduce(findBest, temp, [])
+            if i*interval + j >= len(locations):
+                break
+            temp.append(locations[i*interval + j])
+            
+            
+        top_hotel = max(temp[-1]["hotels"], key=lambda hotel: hotel["rating"])
+        top_dinner = max(temp[-1]["food"], key=lambda food: food["rating"])
+        # print("top_dinner: " + json.dumps(top_dinner, indent=4, sort_keys=True))
+        # print(temp[0]["attractions"])
+        for loc in temp:
+            print(len(loc["attractions"]))
+        def best_attraction(location):
+            attrs = location["attractions"]
+            if len(attrs) > 0:
+                return max(attrs, key=lambda attr: attr["rating"])
+            else:
+                return {"rating": -1}
+        top_x_activities = sorted(temp, key=lambda loc: best_attraction(loc)["rating"])[:activities_per_day]
+
+        # for activity in top_x_activities:
+        #     print(json.dumps(activity, indent=4, sort_keys=True))
+        #     activities.append(activity)
+        print("i: " + str(i))
+        days.append({})
+        days[i]["day"] = i
+        days[i]["events"] = top_x_activities
+        # for first day, starting at literal beginning
+        if i == 0:
+            days[i]["start"] = locations[0]["node"]
+        else:
+            days[i]["start"] = days[i-1]["end"]
+
+        days[i]["events"].append(top_dinner)
+        days[i]["events"].append(top_hotel)
+        days[i]["end"] = {"lat": top_hotel["latitude"], "lng": top_hotel["longitude"]}
+
+    return days
+        # bestDay = reduce(findBest, temp, [])
+
     
     # select top 1 from each interval
     # take (num_activites - user_desired_days)
-    return bestLocEvents
 
 # Summary: returns true if an edge case
 def edge_case (user_days, min_hours, num_activities):
+    return False
     if user_days * 24 <= int(ceil(min_hours)):
         return True
     elif num_activities < user_days:
@@ -59,19 +102,21 @@ def edge_case (user_days, min_hours, num_activities):
 
  # Summary: returns the filtered events for all waypoints 
 def filterEvents (events, min_num_events):
-    bestEvents = []
-    choose_best = create_filterEvent(min_num_events)
-    return reduce(choose_best, events, bestEvents)
+    # print(len(events))
+    return sorted(events, key=lambda event: event["num_reviews"])[:min_num_events]
+    # bestEvents = []
+    # choose_best = create_filterEvent(min_num_events)
+    # return reduce(choose_best, events, bestEvents)
     
 # Summary: returns the filtered events, removes events with
 #          too few reviews or too low ratings
 def create_filterEvent(min_num_events):
     def filterEvent(bestEvents, event):
-        if length(bestEvents) < min_num_events:
+        if len(bestEvents) < min_num_events:
             bestEvents.append(event)
         else:
             bestEvents.append(event)
-            bestEvents.remove(worstBestEvent(bestEvents)])
+            bestEvents.remove(worstBestEvent(bestEvents))
         return bestEvents
 
 # Summary: returns the best event with the fewest number of reviews
@@ -79,12 +124,14 @@ def worstBestEvent(events):
     minimum = {}
     count = 0
     for event in events:
-        if count == 0
+        if count == 0:
             minimum = event
         elif minimum["num_reviews"] > event["num_reviews"]:
             minimum = event
     return minimum
 
-
-
-
+crap = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
+crap = tripadvisor.getResults(crap)
+crap = getResults(crap)
+print(json.dumps(crap, indent=4, sort_keys=True))
+# print(crap)
