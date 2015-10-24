@@ -57,8 +57,8 @@ def makeItinerary (data):
         top_dinner = max(temp[-1]["food"], key=lambda food: food["rating"])
         # print("top_dinner: " + json.dumps(top_dinner, indent=4, sort_keys=True))
         # print(temp[0]["attractions"])
-        for loc in temp:
-            print(len(loc["attractions"]))
+        # for loc in temp:
+        #     print(len(loc["attractions"]))
         def best_attraction(location):
             attrs = location["attractions"]
             if len(attrs) > 0:
@@ -66,6 +66,7 @@ def makeItinerary (data):
             else:
                 return {"rating": -1}
         top_x_activities = sorted(temp, key=lambda loc: best_attraction(loc)["rating"])[:activities_per_day]
+        top_x_activities = [best_attraction(activity) for activity in top_x_activities]
 
         # for activity in top_x_activities:
         #     print(json.dumps(activity, indent=4, sort_keys=True))
@@ -133,5 +134,6 @@ def worstBestEvent(events):
 crap = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
 crap = tripadvisor.getResults(crap)
 crap = getResults(crap)
+# print(json.dumps(tripadvisor.getResults(path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")), indent=4, sort_keys=True))
 print(json.dumps(crap, indent=4, sort_keys=True))
 # print(crap)
