@@ -7,7 +7,7 @@ function initMap(itin) {
   itinerary = itin;
 
   map = new google.maps.Map(document.getElementById('map'), {
-    center: itinerary[0]["start"],
+    center: createLocation(itinerary[0]["start"]),
     scrollwheel: false,
     zoom: 10
     //mapTypeId: google.maps.MapTypeId.TERRAIN
@@ -39,10 +39,10 @@ function setEntireRoute() {
 
   // Set destination, origin and travel mode.
   var request = {
-    destination: itinerary[itinerary.length - 1]["end"],
-    origin: itinerary[0]["start"],
+    destination: createLocation(itinerary[itinerary.length - 1]["end"]),
+    origin: createLocation(itinerary[0]["start"]),
     waypoints: getWaypoints(),
-    optimizeWaypoints: false,
+    optimizeWaypoints: true,
     travelMode: google.maps.TravelMode.DRIVING
   };
 
@@ -50,8 +50,11 @@ function setEntireRoute() {
   var directionsService = new google.maps.DirectionsService();
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
+      console.log("directionsServer request success");
       // Display the route on the map.
       directionsDisplay.setDirections(response);
+    } else {
+      console.log(response);
     }
   });
 }
@@ -63,15 +66,15 @@ function setRouteForDay(d) {
   day = itinerary[d]
   for (j = 0; j < day["events"].length; j++) {
     node = day["events"][j];
-    waypoints.push(createWaypoint(createLocation(node["location"])));
+    waypoints.push(createWaypoint(node["location"]));
   }
 
   // Set destination, origin and travel mode.
   var request = {
-    destination: day["end"],
-    origin: day["start"],
+    destination: createLocation(day["end"]),
+    origin: createLocation(day["start"]),
     waypoints: waypoints,
-    optimizeWaypoints: false,
+    optimizeWaypoints: true,
     travelMode: google.maps.TravelMode.DRIVING
   };
 
@@ -86,7 +89,8 @@ function setRouteForDay(d) {
 }
 
 function createLocation(locPair) {
-  return new google.maps.LatLng(locPair["lat"], locPair["lng"]);
+  console.log(JSON.stringify(locPair));
+  return new google.maps.LatLng(parseFloat(locPair["lat"]), parseFloat(locPair["lng"]));
 }
 
 function getWaypoints() {
@@ -94,11 +98,12 @@ function getWaypoints() {
   for (i = 0; i < itinerary.length; i++) {
     day = itinerary[i];
     if (i != 0) {
-      locations.push(createWaypoint(createLocation(day["start"])))
+      locations.push(createWaypoint(day["start"]));
     }
     for (j = 0; j < day["events"].length; j++) {
       node = day["events"][j];
-      locations.push(createWaypoint(createLocation(node["location"])));
+      // console.log(JSON.stringify(node));
+      locations.push(createWaypoint(node["location"]));
     }
   }
   return locations;
@@ -106,7 +111,7 @@ function getWaypoints() {
 
 function createWaypoint (loc) {
   return {
-    location: loc,
+    location: createLocation(loc),
     stopover: true
   }
 }
@@ -115,7 +120,7 @@ function createMarker(loc, name, day) {
   // create new marker
   var mark = new google.maps.Marker({
     map: map,
-    position: loc,
+    position: createLocation(loc),
     title: name
   });
 

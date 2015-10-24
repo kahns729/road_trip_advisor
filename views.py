@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, make_response
+import path, tripadvisor, itinerary
 import sqlite3
 import json
 
@@ -23,7 +24,7 @@ days = [
                         "location": {"lat": 41.65, "lng": -71.5}
                     }
                 ],
-                "end": {"lat": 41.5, "lng": -72},
+                "end": {"lat": "41.5", "lng": "-72"},
                 "hours_driving": 8,
                 "miles": 480
             },
@@ -58,7 +59,6 @@ app.config.from_object('config')
 
 @app.route("/smap")
 def smap():
-    
     return render_template('smap.html', itinerary=days)
 
 def access_db():
@@ -66,7 +66,14 @@ def access_db():
 
 @app.route("/trip")
 def trip():
-    return render_template('trip.html', days=days)
+    nodes = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
+    events = tripadvisor.getResults(nodes)
+    yodays = itinerary.getResults(events)
+    # print("yodays: ")
+    # print(json.dumps(yodays, indent=4, sort_keys=True))
+    # print("days: ")
+    # print(json.dumps(days, indent=4, sort_keys=True))
+    return render_template('trip.html', days=yodays)
 
 @app.route("/")
 def login():

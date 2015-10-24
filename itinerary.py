@@ -67,19 +67,23 @@ def makeItinerary (data):
                 return {"rating": -1}
         top_x_activities = sorted(temp, key=lambda loc: best_attraction(loc)["rating"])[:activities_per_day]
         top_x_activities = [best_attraction(activity) for activity in top_x_activities]
+        top_x_activities = filter(lambda a: a["rating"]>=0, top_x_activities)
 
         # for activity in top_x_activities:
         #     print(json.dumps(activity, indent=4, sort_keys=True))
         #     activities.append(activity)
         print("i: " + str(i))
         days.append({})
+        if i==0:
+            print(json.dumps(top_x_activities, indent=4))
         days[i]["day"] = i
         days[i]["events"] = top_x_activities
         # for first day, starting at literal beginning
         if i == 0:
             days[i]["start"] = locations[0]["node"]
         else:
-            days[i]["start"] = days[i-1]["end"]
+            days[i]["start"] = {"lat": float(days[i-1]["end"]["lat"]), "lng": float(days[i-1]["end"]["lng"])}
+            # json.loads(days[i-1]["end"])
 
         days[i]["events"].append(top_dinner)
         days[i]["events"].append(top_hotel)
@@ -131,9 +135,9 @@ def worstBestEvent(events):
             minimum = event
     return minimum
 
-crap = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
-crap = tripadvisor.getResults(crap)
-crap = getResults(crap)
+# crap = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
+# crap = tripadvisor.getResults(crap)
+# crap = getResults(crap)
 # print(json.dumps(tripadvisor.getResults(path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")), indent=4, sort_keys=True))
-print(json.dumps(crap, indent=4, sort_keys=True))
+# print(json.dumps(crap, indent=4, sort_keys=True))
 # print(crap)
