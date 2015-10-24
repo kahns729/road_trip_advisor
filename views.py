@@ -58,7 +58,6 @@ app.config.from_object('config')
 
 @app.route("/smap")
 def smap():
-    
     return render_template('smap.html', itinerary=days)
 
 def access_db():
