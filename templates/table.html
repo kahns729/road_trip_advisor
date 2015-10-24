@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>RoadTripAdvisor</title>
+
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/6424402.jpeg') }}" type="image/x-icon">
+
+        <link rel="stylesheet" type="text/css" 
+        href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" 
+        href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
+
+        <script type="text/javascript" language="javascript" 
+        src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" language="javascript" 
+        src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" 
+        src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                $('#hb').dataTable();
+            } );
+        </script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button><a class="navbar-brand" href="#">RoadTripAdvisor</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+        </nav>
+        
+        <div class="container">
+            <table id="hb" class="table table-striped table-bordered" cellspacing="0" width="100%">  
+            <thead>
+                <tr>
+                {% set labels = ['Carrier', 'HCPCS', 'Locality', 'Facility Fee', 'Out of Facility Fee', 'State', 'Location'] %}
+                {% for label in labels %}
+                <th>{{ label }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for pt in data %}
+                <tr>
+                    <th>{{ pt['carrier'] }}</th>
+                    <th>{{ pt['hcpcs'] }}</th>
+                    <th>{{ pt['locality'] }}</th>
+                    <th>{{ pt['fac_fee'] }}</th>
+                    <th>{{ pt['non_fac_fee'] }}</th>
+                    <th>{{ pt['state'] }}</th>
+                    <th>{{ pt['location'] }}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </div>
+
+        <script type="text/javascript">
+            $('#hb')
+                .removeClass('display')
+                .addClass('table table-striped table-bordered');
+        </script>
+    </body>
+</html>
