@@ -71,7 +71,7 @@ def trip():
     trip_length = request.args.get('trip_length', None)
     if trip_length == None:
        trip_length = 0 
-    print("Start loc: " + start + "\nEnd loc: " + end + "\nTrip len: " + trip_length)
+    print("Start loc: " + start + "\nEnd loc: " + end + "\nTrip len: " + str(trip_length))
     nodes = path.find_waypoints(start, end, trip_length)
     # nodes = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
     events = tripadvisor.getResults(nodes)

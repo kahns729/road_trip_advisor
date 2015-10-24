@@ -95,9 +95,8 @@
     <script> 
     // handle the call to the map page
     function func() {
-        console.log("here!");
         if (($('#start').val() != "") && ($('#end').val() != "")) {
-            window.location.href = '/trip?start='+ $('#start').val() + '&end='+ $('#end').val() + "&trip_length" +  $('#trip_length').val();
+            window.location.href = '/trip?start='+ $('#start').val() + '&end='+ $('#end').val() + "&trip_length=" +  $('#trip_length').val();
 
         }
     }

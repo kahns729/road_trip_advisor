@@ -67,7 +67,7 @@ def find_waypoints(source, destination, trip_length):
 	duration = float(hrs) + float(mins)/60
 	# TODO: CHANGE!!! :D
 	if trip_length == 0:
-		trip_length = duration / 10
+		trip_length = int(math.ceil(float(duration) / 10))
 	return {"points": points, "duration": duration, "usertime": trip_length}
             #int(math.ceil(duration / 8))}
 

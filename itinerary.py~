@@ -23,14 +23,14 @@ def getResults (data):
 def makeItinerary (data):
     scale = 1
     daytime = 12
-    user_desired_days = data["usertime"]
+    user_desired_days = int(data["usertime"])
     min_time = data["duration"]
     total_time = int(ceil(scale * data["duration"]))
-    fun_time = int(ceil(user_desired_days * daytime)) - total_time
+    fun_time = int(ceil(float(user_desired_days * daytime))) - total_time
     num_activities = fun_time / 2
     activities_per_day = num_activities / user_desired_days
     locations = data["events"]
-    drive_hours = int(ceil(user_desired_days * daytime)) - fun_time
+    drive_hours = int(ceil(float(user_desired_days * daytime))) - fun_time
     days = []
 
     start = data["events"][0]["node"]
@@ -52,9 +52,18 @@ def makeItinerary (data):
                 break
             temp.append(locations[i*interval + j])
             
-            
-        top_hotel = max(temp[-1]["hotels"], key=lambda hotel: hotel["rating"])
-        top_dinner = max(temp[-1]["food"], key=lambda food: food["rating"])
+        iter = -1
+        last_stop = temp[iter]
+        while last_stop["hotels"] == []:
+            iter = iter - 1
+            last_stop = temp[iter]
+        top_hotel = max(last_stop["hotels"], key=lambda hotel: hotel["rating"])
+        iter = -1
+        last_stop = temp[iter]
+        while last_stop["food"] == []:
+            iter = iter - 1
+            last_stop = temp[iter]
+        top_dinner = max(last_stop["food"], key=lambda food: food["rating"])
         # print("top_dinner: " + json.dumps(top_dinner, indent=4, sort_keys=True))
         # print(temp[0]["attractions"])
         # for loc in temp:
