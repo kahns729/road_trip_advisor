@@ -1,3 +1,11 @@
 #map {
     height: 360px;
 }
+
+.green {
+	background-color: #589442 !important;
+}
+
+.light {
+	background-color: #87D37C !important;
+}

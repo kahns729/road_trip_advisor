@@ -42,6 +42,52 @@ function display_events(events) {
 
 function display_description(event) {
 	var html_string = "";
+	if (event.rating_image_url != null) {
+		html_string += "<img src=" + event.rating_image_url + " alt='rating' />"
+	}
 	html_string = html_string + "<h1>" + event.name + "</h1>";
+	if (event.subcategory != null && event.subcategory.length > 0) {
+		html_string += "<h2>" + event.subcategory[0].localized_name
+		if (event.ranking_data != null) {
+			html_string += " (" + event.ranking_data.ranking_string + ")"
+		}
+		html_string += "</h2>"
+	}
+	if (event.location_string != null) {
+		html_string += "<h3>" + event.location_string + "</h3>"
+	}
+	if (event.see_all_photos != null) {
+		html_string += "<img src=" + getImage(event.see_all_photos) + " alt='img'/>"
+	}
+	
+	console.log(event);
 	$("#event_description").html(html_string);
+}
+
+function getImage (url) {
+	function makeHttpObject() {
+		try {return new XMLHttpRequest();}
+		catch (error) {}
+		try {return new ActiveXObject("Msxml2.XMLHTTP");}
+		catch (error) {}
+		try {return new ActiveXObject("Microsoft.XMLHTTP");}
+		catch (error) {}
+
+		throw new Error("Could not create HTTP request object.");
+	}
+
+	regex = /<img src=[^><]*.jpg\" class=\"photo_image\"/i
+
+	var request = makeHttpObject();
+	request.open("GET", url, true);
+	request.send(null);
+	request.onreadystatechange = function() {
+		if (request.readyState == 4) {
+			console.log(request.responseText)
+			result = regex.exec(request.responseText);
+			console.log(result);
+			r = result[0];
+			return r.split('"')[1];
+		}
+	};
 }
