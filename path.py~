@@ -8,7 +8,7 @@ def distance(start, end):
 	dist_str = str(vincenty((start["lat"], start["lng"]), (end["lat"], end["lng"])))
 	return km_to_m * float(dist_str.split(" ")[0])
 
-def find_waypoints(source, destination):
+def find_waypoints(source, destination, trip_length):
 	url = 'https://maps.googleapis.com/maps/api/directions/json'
 	values = {'origin' : source,
 	          'destination' : destination,
@@ -66,7 +66,8 @@ def find_waypoints(source, destination):
 		mins = duration_str.split(" ")[0]
 	duration = float(hrs) + float(mins)/60
 	# TODO: CHANGE!!! :D
-	return {"points": points, "duration": duration, "usertime": int(math.ceil(duration / 8))}
+	return {"points": points, "duration": duration, "usertime": trip_length}
+            #int(math.ceil(duration / 8))}
 
 
 

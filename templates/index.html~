@@ -66,6 +66,9 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="Destination" id="end">
                             </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" placeholder="Length of Roadtrip" id="trip_length">
+                            </div>
                         </form>
                         <!-- <hr class="intro-divider"> -->
                         <ul class="list-inline intro-social-buttons">
@@ -93,8 +96,8 @@
     // handle the call to the map page
     function func() {
         console.log("here!");
-        if (($('#start').val() != "") || ($('#end').val() != "")) {
-            window.location.href = '/trip?start='+ $('#start').val() + '&end='+ $('#end').val();
+        if (($('#start').val() != "") && ($('#end').val() != "")) {
+            window.location.href = '/trip?start='+ $('#start').val() + '&end='+ $('#end').val() + "&trip_length" +  $('#trip_length').val();
 
         }
     }
