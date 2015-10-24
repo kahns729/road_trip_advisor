@@ -10,23 +10,22 @@ def getJSON (lat, lon, extra = None):
 	JSON = json.loads(urllib2.urlopen(address).read())
 	return JSON['data']
 
+# needed for conversion to google maps
 def parseJSON (json):
-	dic = {}
-	dic["address"] = json["address_obj"]["address_string"]
-	dic["dist"] = float(json["distance"])
-	dic["lat"] = float(json["latitude"])
-	dic["lng"] = float(json["longitude"])
-	dic["name"] = json["name"]
-	return dic
+	json["location"] = {"lat" : float(json["latitude"]), "lng" : float(json["longitude"])}
+	return json
 
 def getFood (lat, lon):
 	return [parseJSON(json) for json in getJSON(lat, lon, "restaurants")]
+	# return getJSON(lat, lon, "restaurants")
 
 def getHotels (lat, lon):
 	return [parseJSON(json) for json in getJSON(lat, lon, "hotels")]
+	# return getJSON(lat, lon, "hotels")
 
 def getAttractions (lat, lon):
 	return [parseJSON(json) for json in getJSON(lat, lon, "attractions")]
+	# return getJSON(lat, lon, "attractions")
 
 def getAll (lat, lon):
 	dic = {}
