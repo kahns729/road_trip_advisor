@@ -42,7 +42,7 @@ def smap():
                     {
                         "name": "Event 3",
                         "category": {"name": "food"},
-                        "location": {"lat": 41.65, "lng": -71.3}
+                        "location": {"lat": 41.65, "lng": -71.5}
                     }
                 ],
                 "end": {"lat": 41.5, "lng": -72},
@@ -68,7 +68,7 @@ def smap():
                         "location": {"lat": 41.8, "lng": -72.8}
                     }
                 ],
-                "end": {"lat": 41, "lng": -73},
+                "end": {"lat": 41, "lng": -72.2},
                 "hours_driving": 10,
                 "miles": 540
             }
