@@ -87,7 +87,7 @@ function getImage (id) {
 			response = JSON.parse(request.responseText);
 			console.log(response);
 			data = response["data"];
-			if (data != null and data.length > 0) {
+			if (data != null && data.length > 0) {
 				images = data[0]["images"]
 				for (var key in images) {
 					if (images[key]["url"] != null) {
