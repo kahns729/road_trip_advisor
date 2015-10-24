@@ -2,9 +2,6 @@ from flask import Flask, render_template, jsonify, make_response
 import sqlite3
 import json
 
-app = Flask(__name__)
-app.config.from_object('config')
-
 days = [ 
             {
                 "day": 1,
@@ -13,48 +10,56 @@ days = [
                     {
                         "name": "Event 1",
                         "category": {"name": "hotel"},
-                        "location": {"lat": 43, "lng": -70}
+                        "location": {"lat": 41.7, "lng": -71.5}
                     },
                     {
                         "name": "Event 2",
                         "category": {"name": "attraction"},
-                        "location": {"lat": 44, "lng": -69}
+                        "location": {"lat": 41.6, "lng": -71.8}
                     },
                     {
                         "name": "Event 3",
                         "category": {"name": "food"},
-                        "location": {"lat": 45, "lng": -68}
+                        "location": {"lat": 41.65, "lng": -71.3}
                     }
                 ],
-                "end": {"lat": 45, "lng": -68},
+                "end": {"lat": 41.5, "lng": -72},
                 "hours_driving": 8,
                 "miles": 480
             },
             {
                 "day": 2,
-                "start": {"lat": 45, "lng": -68},
+                "start": {"lat": 41.5, "lng": -72},
                 "events": [
                     {
                         "name": "Day 2 Event 1",
                         "category": "Hotel",
-                        "location": {"lat": 44, "lng": -69}
+                        "location": {"lat": 41.3, "lng": -72.3}
                     },
                     {
                         "name": "Day 2 Event 2",
                         "category": "Attraction",
-                        "location": {"lat": 43, "lng": -70}
+                        "location": {"lat": 41.5, "lng": -72.5}
                     },
                     {
                         "name": "Day 2 Event 3",
                         "category": "Food",
-                        "location": {"lat": 42, "lng": -71}
+                        "location": {"lat": 41.8, "lng": -72.8}
                     }
                 ],
-                "end": {"lat": 42, "lng": -71},
+                "end": {"lat": 41, "lng": -73},
                 "hours_driving": 10,
                 "miles": 540
             }
     ]
+
+app = Flask(__name__)
+app.config.from_object('config')
+
+@app.route("/smap")
+def smap():
+    
+    return render_template('smap.html', itinerary=days)
 
 def access_db():
     return sqlite3.connect(app.config['DATABASE'])
@@ -80,4 +85,4 @@ def table():
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'not found'}), 404)
+    return make_response(jsonify({'error': 'got rekt'}), 404)
