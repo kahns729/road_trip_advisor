@@ -56,9 +56,14 @@ def find_waypoints(source, destination):
 			points.append(step["start_location"])
 			dist_mod = dist_mod % config.DIST_INTERVAL
 	duration_str = data["routes"][0]["legs"][0]["duration"]["text"]
-	print("Duration str: " + duration_str)
-	hrs = duration_str.split(" ")[0]
-	mins = duration_str.split(" ")[2]
+	#print("Duration str: " + duration_str)
+	hrs = 0
+	mins = 0
+	if "hours" in duration_str:
+		hrs = duration_str.split(" ")[0]
+		mins = duration_str.split(" ")[2]
+	else:
+		mins = duration_str.split(" ")[0]
 	duration = float(hrs) + float(mins)/60
 	# TODO: CHANGE!!! :D
 	return {"points": points, "duration": duration, "usertime": int(math.ceil(duration / 8))}

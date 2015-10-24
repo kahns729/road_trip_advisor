@@ -52,9 +52,13 @@ def makeItinerary (data):
                 break
             temp.append(locations[i*interval + j])
             
-            
-        top_hotel = max(temp[-1]["hotels"], key=lambda hotel: hotel["rating"])
-        top_dinner = max(temp[-1]["food"], key=lambda food: food["rating"])
+        iter = -1
+        last_stop = temp[iter]
+        while last_stop["hotels"] == []:
+            iter = iter - 1
+            last_stop = temp[iter]
+        top_hotel = max(last_stop["hotels"], key=lambda hotel: hotel["rating"])
+        top_dinner = max(last_stop["food"], key=lambda food: food["rating"])
         # print("top_dinner: " + json.dumps(top_dinner, indent=4, sort_keys=True))
         # print(temp[0]["attractions"])
         # for loc in temp:

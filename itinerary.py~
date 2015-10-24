@@ -51,46 +51,51 @@ def makeItinerary (data):
             if i*interval + j >= len(locations):
                 break
             temp.append(locations[i*interval + j])
+            
+            
         top_hotel = max(temp[-1]["hotels"], key=lambda hotel: hotel["rating"])
         top_dinner = max(temp[-1]["food"], key=lambda food: food["rating"])
-        print(len(temp[-1]["hotels"]))
-        print(len(temp[-1]["food"]))
-        #if i == 0:
-        #    print(json.dumps(top_hotel, indent=4, sort_keys=True))
-        #    print(json.dumps(temp[-1]["hotels"], indent=4, sort_keys=True))
-#             print(json.dumps(top_dinner, indent=4, sort_keys=True))
         # print("top_dinner: " + json.dumps(top_dinner, indent=4, sort_keys=True))
         # print(temp[0]["attractions"])
         # for loc in temp:
-            # print(len(loc["attractions"]))
+        #     print(len(loc["attractions"]))
         def best_attraction(location):
             attrs = location["attractions"]
             if len(attrs) > 0:
                 return max(attrs, key=lambda attr: attr["rating"])
             else:
                 return {"rating": -1}
-        top_x_activities = sorted(temp, key=lambda loc: best_attraction(loc)["rating"])[:1] #activities_per_day]
+        top_x_activities = sorted(temp, key=lambda loc: best_attraction(loc)["rating"])[:activities_per_day]
+        top_x_activities = [best_attraction(activity) for activity in top_x_activities]
+        top_x_activities = filter(lambda a: a["rating"]>=0, top_x_activities)
 
-        for activity in top_x_activities:
-             print(json.dumps(activity, indent=4, sort_keys=True))
-             activities.append(activity)
+        # for activity in top_x_activities:
+        #     print(json.dumps(activity, indent=4, sort_keys=True))
+        #     activities.append(activity)
         print("i: " + str(i))
         days.append({})
+        if i==0:
+            print(json.dumps(top_x_activities, indent=4))
         days[i]["day"] = i
-        activities.append(top_dinner)
-        activities.append(top_hotel)
-        days[i]["events"] = activities
+        days[i]["events"] = top_x_activities
         # for first day, starting at literal beginning
         if i == 0:
             days[i]["start"] = locations[0]["node"]
         else:
-            days[i]["start"] = days[i-1]["end"]
+            days[i]["start"] = {"lat": float(days[i-1]["end"]["lat"]), "lng": float(days[i-1]["end"]["lng"])}
+            # json.loads(days[i-1]["end"])
 
- #       days[i]["events"].append(top_dinner)
-#        days[i]["events"].append(top_hotel)
+        days[i]["events"].append(top_dinner)
+        days[i]["events"].append(top_hotel)
         days[i]["end"] = {"lat": top_hotel["latitude"], "lng": top_hotel["longitude"]}
+
     return days
+        # bestDay = reduce(findBest, temp, [])
+
     
+    # select top 1 from each interval
+    # take (num_activites - user_desired_days)
+
 # Summary: returns true if an edge case
 def edge_case (user_days, min_hours, num_activities):
     return False
@@ -130,7 +135,9 @@ def worstBestEvent(events):
             minimum = event
     return minimum
 
-crap = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
-crap = tripadvisor.getResults(crap)
-crap = getResults(crap)
-#print(json.dumps(crap, indent=4, sort_keys=True))
+# crap = path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")
+# crap = tripadvisor.getResults(crap)
+# crap = getResults(crap)
+# print(json.dumps(tripadvisor.getResults(path.find_waypoints("USS Alabama, Battleship Parkway, Mobile, AL", "USS Constitution, Boston, MA")), indent=4, sort_keys=True))
+# print(json.dumps(crap, indent=4, sort_keys=True))
+# print(crap)
