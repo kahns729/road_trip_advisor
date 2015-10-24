@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, make_response
+from flask import Flask, render_template, jsonify, make_response, request
 import sqlite3
 import json
 
@@ -65,6 +65,10 @@ def access_db():
 
 @app.route("/trip")
 def trip():
+    start = request.args.get('start', None)
+    end = request.args.get('end', None)
+    print start 
+    print end
     return render_template('trip.html', days=days)
 
 @app.route("/")
