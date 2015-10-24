@@ -2,6 +2,8 @@ var days;
 
 function init(data) {
 	days = data;
+	show_overview();
+	display_description(days[0].events[0]);
 }
 
 function show_overview() {

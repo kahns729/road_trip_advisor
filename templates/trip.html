@@ -4,6 +4,7 @@
   <title>Layouts &raquo; Hero Sidebar</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='') }}css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='') }}css/keen-dashboards.css" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='') }}css/trip.css" />
 </head>
 <body class="application">
 
@@ -80,8 +81,8 @@
               <div class="chart-title">
                 Map
               </div>
-              <div class="chart-stage">
-                <img data-src="holder.js/100%x120/white">
+              <div id="map" class="chart-stage">
+                
               </div>
               <div class="chart-notes">
                 Notes about this chart
@@ -103,7 +104,10 @@
   <script type="text/javascript" src="{{ url_for('static', filename='') }}js/keen.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='') }}js/meta.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='') }}js/trip.js"></script>
-  <script>init({{ days|tojson|safe }})</script>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&amp;libraries=places"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='') }}js/map.js"></script>
+
+  <script>init({{ days|tojson|safe }});initMap({{ days|tojson|safe }});</script>
 
 </body>
 </html>
