@@ -9,3 +9,4 @@ test.db
 *.ipynb
 hb.pub
 hb
+private.py
