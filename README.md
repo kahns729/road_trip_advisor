@@ -1,8 +1,18 @@
+[index]: readme/index.png
+[overview]: readme/overview.png
+
+# RoadTripAdvisor
+##### Dariusz Adamczyk, Seth Kahn, Gabe Terrell #####
+
+
 Background
 -----------------
 
-This repository contains the 2015 Tufts PolyHack project *RoadTripAdvisor*. The project is intended to showcase the use of the TripAdvisor API and the Google Maps API, and some complex algorithms for connecting the two together in an interesting way.
+TripAdvisor is a wonderful tool for flying to a specific destination; however, the service lacks a good way to plan a cross-country roadtrip, where there are dozens of possible routes along the way, all full of different sights, attractions, and food. For Tufts' Fall 2015 Polyhack, we were inspired to create RoadTripAdvisor. Given a starting location, a destination, and a desired number of driving days, RoadTripAdvisor can create an optimized road trip itinerary (food, sight-seeing, and hotels) using TripAdvisor and Google Maps APIs.
 
+![Landing Page of RoadTripAdvisor][index]
+
+![Itinerary for a four day road trip from Denver, CO to Somerville, MA][overview]
 
 Usage
 -----------------
