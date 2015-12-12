@@ -2,7 +2,7 @@
 [overview]: readme/overview.png
 
 # RoadTripAdvisor
-##### Dariusz Adamczyk, Seth Kahn, Gabe Terrell #####
+##### [Dariusz Adamczyk](https://github.com/dariuszadamczyk), [Seth Kahn](https://github.com/kahns729), [Gabe Terrell](https://github.com/gabe-terrell) #####
 
 
 Background
